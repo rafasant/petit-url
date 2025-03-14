@@ -1,0 +1,77 @@
+.url-form {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.url-form h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.url-form input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.url-form button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.url-form button:hover {
+  background-color: #2980b9;
+}
+
+.url-form button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.custom-slug-toggle {
+  margin-bottom: 15px;
+}
+
+.custom-slug-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.custom-slug-input span {
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+  color: #666;
+}
+
+.custom-slug-input input {
+  border: none;
+  flex: 1;
+}
