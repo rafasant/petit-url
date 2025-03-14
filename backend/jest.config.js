@@ -7,6 +7,15 @@ module.exports = {
     'src/**/*.{js,ts}',
     '!src/**/*.d.ts',
   ],
+  compilerOptions: {
+    "target": "ES6",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["jest", "node"]
+  },
   coverageDirectory: 'coverage',
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
 };
