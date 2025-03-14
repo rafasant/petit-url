@@ -8,7 +8,8 @@ export const generateToken = (user: IUser): string => {
   return jwt.sign(
     { id: user._id, email: user.email },
     JWT_SECRET,
-    { expiresIn: JWT_EXPIRES_IN }
+    // Use type assertion to fix the expiresIn type issue
+    { expiresIn: JWT_EXPIRES_IN as jwt.SignOptions['expiresIn'] }
   );
 };
 

@@ -5,7 +5,7 @@ import { generateSlug } from '../utils/generateSlug';
 
 export const createShortUrl = async (req: Request, res: Response): Promise<void> => {
   const { originalUrl, customSlug } = req.body;
-  const baseUrl = process.env.BASE_URL || 'http://localhost:3001'\;
+  const baseUrl = process.env.BASE_URL || 'http://localhost:3001';
 
   // Check if the URL is valid
   if (!validUrl.isUri(originalUrl)) {
@@ -105,7 +105,7 @@ export const redirectToOriginalUrl = async (req: Request, res: Response): Promis
 export const getUserUrls = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId = req.user._id;
-    const baseUrl = process.env.BASE_URL || 'http://localhost:3001'\;
+    const baseUrl = process.env.BASE_URL || 'http://localhost:3001';
     
     const urls = await Url.find({ userId }).sort({ createdAt: -1 });
     

@@ -6,7 +6,7 @@ import UrlForm from './components/UrlForm';
 import ResultDisplay from './components/ResultDisplay';
 import Login from './components/Login';
 import UrlList from './components/UrlList';
-import { getUserUrls, ShortenUrlResponse } from './services/api';
+import { getUserUrls, ShortenUrlResponse, UserUrl } from './services/api';
 
 // Home page component
 const Home: React.FC = () => {
@@ -32,7 +32,7 @@ const Home: React.FC = () => {
 // Dashboard component
 const Dashboard: React.FC = () => {
   const { isAuthenticated } = useAuth();
-  const [urls, setUrls] = useState([]);
+  const [urls, setUrls] = useState<UserUrl[]>([]);
   const [result, setResult] = useState<ShortenUrlResponse | null>(null);
   const [loading, setLoading] = useState(true);
   
