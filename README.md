@@ -37,12 +37,13 @@ cd petit-url
 ```
 docker-compose up -d
 ```
+(at this point, you can run application straight from docker)
 
 3. Install backend dependencies and run database locally:
 ```
 cd backend
 npm install
-./run-databases.sh (This will start both MongoDB and Redis in Docker containers)
+./run-databases.sh (This will run both MongoDB and Redis in Docker containers locally)
 ```
 4. Set up environment variables:
 Create a `.env` file in the backend directory:
