@@ -58,6 +58,7 @@ const Login: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={loading}
+            placeholder={isLogin ? '' : 'Password must be 6 characters or more'}
           />
         </div>
         <button type="submit" disabled={loading}>
