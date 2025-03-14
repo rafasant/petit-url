@@ -112,7 +112,7 @@ const Header: React.FC = () => {
           {isAuthenticated ? (
             <>
               <Link to="/dashboard">Dashboard</Link>
-              <a href="#" onClick={(e) => { e.preventDefault(); logout(); }}>Logout</a>
+              <button className="link-button" onClick={(e) => { e.preventDefault(); logout(); }}>Logout</button>
             </>
           ) : (
             <Link to="/login">Login</Link>

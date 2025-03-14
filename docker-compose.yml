@@ -11,6 +11,59 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=password
+    networks:
+      - petit-url-network
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - petit-url-network
+
+  backend:
+    build: ./backend
+    container_name: petit-url-backend
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mongodb
+      - redis
+    environment:
+      - MONGODB_URI=mongodb://admin:password@mongodb:27017/petit-url?authSource=admin
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PORT=3001
+      - BASE_URL=http://localhost:3001
+      - JWT_SECRET=your-secure-jwt-secret-key
+    networks:
+      - petit-url-network
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  frontend:
+    build: ./frontend
+    container_name: petit-url-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=http://localhost:3001/api
+    networks:
+      - petit-url-network
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+networks:
+  petit-url-network:
+    driver: bridge
 
 volumes:
   mongodb_data:
+  redis_data:

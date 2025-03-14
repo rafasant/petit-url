@@ -47,13 +47,24 @@ export interface AuthResponse {
   };
 }
 
+// Helper to extract error message
+const getErrorMessage = (error: any): string => {
+  // Handle rate limit errors (HTTP 429)
+  if (error.response?.status === 429) {
+    return 'Rate limit exceeded. Please try again later.';
+  }
+  
+  // Regular error handling
+  return error.response?.data?.error || 'An unexpected error occurred. Please try again.';
+};
+
 // API functions
 export const shortenUrl = async (originalUrl: string, customSlug?: string): Promise<ShortenUrlResponse> => {
   try {
     const response = await api.post('/shorten', { originalUrl, customSlug });
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.error || 'Failed to shorten URL');
+    throw new Error(getErrorMessage(error));
   }
 };
 
@@ -63,7 +74,7 @@ export const register = async (email: string, password: string): Promise<AuthRes
     const response = await api.post('/auth/register', { email, password });
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.error || 'Registration failed');
+    throw new Error(getErrorMessage(error));
   }
 };
 
@@ -72,7 +83,7 @@ export const login = async (email: string, password: string): Promise<AuthRespon
     const response = await api.post('/auth/login', { email, password });
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.error || 'Login failed');
+    throw new Error(getErrorMessage(error));
   }
 };
 
@@ -81,7 +92,7 @@ export const getUserUrls = async (): Promise<UserUrl[]> => {
     const response = await api.get('/urls');
     return response.data.urls;
   } catch (error: any) {
-    throw new Error(error.response?.data?.error || 'Failed to get URLs');
+    throw new Error(getErrorMessage(error));
   }
 };
 
