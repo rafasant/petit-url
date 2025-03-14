@@ -1,12 +1,16 @@
 import express from 'express';
-import { createShortUrl, redirectToOriginalUrl } from '../controllers/url.controller';
+import { createShortUrl, redirectToOriginalUrl, getUserUrls } from '../controllers/url.controller';
+import { protect } from '../middleware/auth.middleware';
 
 const router = express.Router();
 
-// Create a short URL
+// Public routes
 router.post('/shorten', createShortUrl);
 
-// Redirect to the original URL
+// Protected routes
+router.get('/urls', protect, getUserUrls);
+
+// Redirect route
 router.get('/:slug', redirectToOriginalUrl);
 
 export default router;

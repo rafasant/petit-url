@@ -40,8 +40,28 @@ export const createShortUrl = async (req: Request, res: Response): Promise<void>
     // Get user ID if authenticated
     const userId = req.user ? req.user._id : null;
 
+    // Check if URL already exists for this user (if logged in)
+    let url;
+    if (userId) {
+      url = await Url.findOne({ originalUrl, userId });
+    } else {
+      // For anonymous users, just create a new URL
+      url = null;
+    }
+
+    if (url) {
+      res.json({
+        originalUrl: url.originalUrl,
+        shortUrl: `${baseUrl}/${url.slug}`,
+        slug: url.slug,
+        visits: url.visits,
+        createdAt: url.createdAt,
+      });
+      return;
+    }
+
     // Create a new URL entry
-    const url = new Url({
+    url = new Url({
       originalUrl,
       slug,
       userId,
@@ -82,4 +102,32 @@ export const redirectToOriginalUrl = async (req: Request, res: Response): Promis
   }
 };
 
-// TODO: Add endpoints for getting URL stats and user URLs
+export const getUserUrls = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const userId = req.user._id;
+    const baseUrl = process.env.BASE_URL || 'http://localhost:3001'\;
+    
+    const urls = await Url.find({ userId }).sort({ createdAt: -1 });
+    
+    const formattedUrls = urls.map(url => ({
+      id: url._id,
+      originalUrl: url.originalUrl,
+      shortUrl: `${baseUrl}/${url.slug}`,
+      slug: url.slug,
+      visits: url.visits,
+      createdAt: url.createdAt,
+      lastVisited: url.lastVisited,
+    }));
+    
+    res.json({
+      success: true,
+      urls: formattedUrls,
+    });
+  } catch (error) {
+    console.error('Error getting user URLs:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+// TODO: Add more advanced stats tracking
+// TODO: Implement URL deletion and updating
