@@ -9,6 +9,16 @@ declare global {
       user?: any;
     }
   }
+  
+  // Add global in-memory storage for when MongoDB is not available
+  var urlStore: {
+    urls: any[];
+    users: any[];
+    findUrls: (query?: any) => any[];
+    findUsers: (query?: any) => any[];
+    addUrl: (url: any) => any;
+    addUser: (user: any) => any;
+  };
 }
 
 export const protect = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -31,8 +41,19 @@ export const protect = async (req: Request, res: Response, next: NextFunction): 
       return;
     }
     
-    // Check if user still exists
-    const user = await User.findById(decoded.id);
+    // Check if user still exists (using mongoose or memory fallback)
+    let user = null;
+    
+    try {
+      // Try to use mongoose model
+      user = await User.findById(decoded.id);
+    } catch (err) {
+      // If mongoose is not working, try memory fallback
+      if (global.urlStore) {
+        const users = global.urlStore.findUsers({ _id: decoded.id });
+        user = users.length > 0 ? users[0] : null;
+      }
+    }
     
     if (!user) {
       res.status(401).json({ error: 'User no longer exists' });
@@ -66,8 +87,19 @@ export const optionalAuth = async (req: Request, res: Response, next: NextFuncti
       return next();
     }
     
-    // Check if user still exists
-    const user = await User.findById(decoded.id);
+    // Check if user still exists (using mongoose or memory fallback)
+    let user = null;
+    
+    try {
+      // Try to use mongoose model
+      user = await User.findById(decoded.id);
+    } catch (err) {
+      // If mongoose is not working, try memory fallback
+      if (global.urlStore) {
+        const users = global.urlStore.findUsers({ _id: decoded.id });
+        user = users.length > 0 ? users[0] : null;
+      }
+    }
     
     if (user) {
       // Set user on request

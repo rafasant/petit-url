@@ -1,16 +1,17 @@
 import express from 'express';
 import { createShortUrl, redirectToOriginalUrl, getUserUrls } from '../controllers/url.controller';
-import { protect } from '../middleware/auth.middleware';
+import { protect, optionalAuth } from '../middleware/auth.middleware';
+import { apiLimiter, shortenLimiter } from '../middleware/rateLimit.middleware';
 
 const router = express.Router();
 
-// Public routes
-router.post('/shorten', createShortUrl);
+// Public routes with rate limiting
+router.post('/shorten', shortenLimiter, optionalAuth, createShortUrl);
 
-// Protected routes
-router.get('/urls', protect, getUserUrls);
+// Protected routes with API rate limiting
+router.get('/urls', apiLimiter, protect, getUserUrls);
 
-// Redirect route
+// Redirect route - no rate limiting to ensure good user experience
 router.get('/:slug', redirectToOriginalUrl);
 
 export default router;
